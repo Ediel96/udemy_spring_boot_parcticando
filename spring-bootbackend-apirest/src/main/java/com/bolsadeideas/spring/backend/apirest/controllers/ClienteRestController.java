@@ -13,7 +13,7 @@ import com.bolsadeideas.spring.backend.apirest.models.entity.Cliente;
 import com.bolsadeideas.spring.backend.apirest.models.services.IClienteService;
 
 
-@CrossOrigin(origins = {"http://www.localhost:4200"})
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api")
 public class ClienteRestController {
