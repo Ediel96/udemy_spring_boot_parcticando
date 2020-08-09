@@ -1,0 +1,53 @@
+<!-- main app container -->
+<div class="card m-3">
+  <h5 class="card-header">Angular 9 Reactive Form Validation</h5>
+  <div class="card-body">
+      <form [formGroup]="registerForm">
+          <div class="form-row">
+
+              <div class="form-group col-6">
+                  <label>Nombre</label>
+                  <input type="text" formControlName="nombre" [(ngModel)]="cliente.nombre"  class="form-control" [ngClass]="{ 'is-invalid': submitted && f.nombre.errors }" />
+                  <div *ngIf="submitted && f.nombre.errors" class="invalid-feedback">
+                      <div *ngIf="f.nombre.errors.required">El nombre es requerido</div>
+                  </div>
+              </div>
+              <div class="form-group col-6">
+                  <label>Apellido</label>
+                  <input type="text" formControlName="apellido" [(ngModel)]="cliente.apellido" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.apellido.errors }" />
+                  <div *ngIf="submitted && f.apellido.errors" class="invalid-feedback">
+                      <div *ngIf="f.apellido.errors.required">El apellido es requerido</div>
+                  </div>
+              </div>
+          </div>
+          <div class="form-group">
+              <label>Email</label>
+              <input type="text" formControlName="email" [(ngModel)]="cliente.email" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.email.errors }" />
+              <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+                  <div *ngIf="f.email.errors.required">Email is required</div>
+                  <div *ngIf="f.email.errors.email">Email must be a valid email address</div>
+              </div>
+          </div>
+
+          <div class="text-center">
+              <button class="btn btn-primary mr-1"  (click)='onSubmit()'  *ngIf="!cliente.id else elseBlock">Register</button>
+
+              <ng-template #elseBlock>
+                <button class="btn btn-primary mr-1"  (click)='updateCliente()'>Editar</button>
+              </ng-template>
+
+              <button class="btn btn-secondary" type="reset" (click)="onReset()">Cancel</button>
+          </div>
+      </form>
+  </div>
+</div>
+
+<!-- credits -->
+<div class="text-center">
+  <p>
+      <a href="https://jasonwatmore.com/post/2020/04/19/angular-9-reactive-forms-validation-example" target="_top">Angular 9 - Reactive Forms Validation Example</a>
+  </p>
+  <p>
+      <a href="https://jasonwatmore.com" target="_top">JasonWatmore.com</a>
+  </p>
+</div>
