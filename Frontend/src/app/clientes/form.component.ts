@@ -7,12 +7,14 @@ import swal from 'sweetalert2';
 
 
 
+
 @Component({
   selector: 'app-form',
   templateUrl: './form.component.html'
 })
 export class FormComponent implements OnInit {
 
+  errores : string[]; 
   registerForm: FormGroup;
   submitted = false;
   cliente : Cliente = new Cliente();
@@ -29,6 +31,7 @@ export class FormComponent implements OnInit {
           apellido: ['', Validators.required],
           email: ['', [Validators.required, Validators.email]],
       });
+
       this.cargarCliente();
   }
 
@@ -43,40 +46,41 @@ export class FormComponent implements OnInit {
 
   updateCliente():void{
     this.ClienteService.updateCliente(this.cliente)
-    .subscribe( cliente =>{
+    .subscribe( res =>{
       this.router.navigate(['/clientes'])
-      swal.fire('Cliente Actulizado', `Cliente ${cliente.nombre} actualizado con exito!`  , 'success');
-    }
+      console.log(res)
+      swal.fire('Cliente Actualizado', `Cliente ${res.nombre} actualizado con exito!`  , 'success');
+      },err =>{
+        this.errores = err.error.errors as string[];
+        console.error('Codigo del error desde el backend: ' + err.status);
+        console.error(err.error.errors);
+      }
     )
   }
 
-
-
-
-  // convenience getter for easy access to form fields
   get f() { return this.registerForm.controls; }
 
   onSubmit() {
       this.submitted = true;
 
-      // stop here if form is invalid
       if (this.registerForm.invalid) {
           return;
       }
 
-      console.log(this.registerForm.value);
       this.ClienteService.create(this.registerForm.value).subscribe(
-        cliente =>{
-          this.router.navigate(['clientes']);
-          swal.fire('Nuevo cliente', `Cliente ${cliente.nombre} creado con exito!`  , 'success');
+        res =>{
+          this.router.navigate(['/clientes'])
+          swal.fire('Nuevo cliente', `Cliente ${res.nombre} creado con exito!`  , 'success');
+        },err =>{
+          this.errores = err.error.errors as string[];
+          console.error('Codigo del error desde el backend: ' + err.status);
+          console.error(err.error.errors);
         }
       )
-      //alert('SUCCESS!! :-)\n\n' + JSON.stringify(this.registerForm.value, null, 4));
   }
 
   onReset() {
       this.submitted = false;
       this.registerForm.reset();
   }
-
 }

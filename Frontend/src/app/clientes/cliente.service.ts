@@ -1,16 +1,17 @@
 import { Injectable } from '@angular/core';
-import { CLIENTES } from './clientes.json';
+import {DatePipe} from '@angular/common';
+
 import { Cliente } from './clientes';
-import { Observable, throwError } from 'rxjs';
-import { of } from 'rxjs';
+import { Observable, throwError, of } from 'rxjs';
 import { HttpClient,  HttpHeaders } from '@angular/common/http';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, map, tap } from 'rxjs/operators';
 import Swal from 'sweetalert2';
 import {Router} from '@angular/router'
 
 @Injectable({
   providedIn: 'root'
 })
+
 export class ClienteService {
 
   private urlEndPoint: string = 'http://localhost:8080/api/clientes';
@@ -21,13 +22,43 @@ export class ClienteService {
   getClientes(): Observable<Cliente[]> {
     //return of(CLIENTES);
     return this.http.get(this.urlEndPoint).pipe(
-      map((response) => response as Cliente[])
+      tap( response => { 
+        let clientes = response  as Cliente[];
+        console.log('ClienteSirvice: tap 1');
+        clientes.forEach(cliente => {
+          console.log(cliente.nombre);
+        }) 
+      }),
+      map((response) =>{
+        let cliente = response as Cliente[];
+        return cliente.map(cliente => {
+          cliente.nombre = cliente.nombre.toUpperCase();
+           
+          let datePipe = new DatePipe('es');
+          //'EEEE dd, MM yyyy' === Sunday 28, 03 2021
+          // cliente.createAt = datePipe.transform(cliente.createAt, 'EEEE dd, MM yyyy')
+          //cliente.createAt =  formatDate(cliente,createAt, 'dd-MM-yyyy', 'es')
+          return cliente;
+        });
+      } ),
+      tap( response => { 
+        console.log('ClienteSirvice: tap 2')
+        response.forEach(cliente => {
+          console.log(cliente.nombre);
+        }) 
+      })
     );
   }
 
   create(cliente:  Cliente ) : Observable<Cliente> {
-    return this.http.post<Cliente>(this.urlEndPoint, cliente, {headers: this.httpheader}).pipe(
+    return this.http.post(this.urlEndPoint, cliente, {headers: this.httpheader}).pipe(
+      map((response : any) => response.cliente as Cliente),
       catchError(e => {
+
+        if(e.status === 400){
+          return throwError(e);
+        }
+
         console.error(console.error(e.error.mensaje));
         Swal.fire('Error al crear el cliente',e.error.mensaje , 'error');
         return throwError(e);
@@ -51,8 +82,14 @@ export class ClienteService {
   }
 
   updateCliente(cliente: Cliente): Observable<Cliente>{
-    return this.http.put<Cliente>(`${this.urlEndPoint}/${cliente.id}`, cliente, {headers: this.httpheader}).pipe(
+    return this.http.put(`${this.urlEndPoint}/${cliente.id}`, cliente, {headers: this.httpheader}).pipe(
+      map((response : any) => response.cliente as Cliente),
       catchError(e => {
+
+        if(e.status === 400){
+          return throwError(e);
+        }
+
         console.error(console.error(e.error.mensaje));
         Swal.fire('Error al editar el cliente',e.error.mensaje , 'error');
         return throwError(e);

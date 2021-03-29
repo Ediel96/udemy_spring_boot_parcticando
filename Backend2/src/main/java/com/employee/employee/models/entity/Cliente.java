@@ -3,6 +3,9 @@ package com.employee.employee.models.entity;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table (name="clientes")
@@ -11,11 +14,16 @@ public class Cliente {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotEmpty(message= "no puede esta vacio")
+    @Size(min=4 , max=12, message = "el tamaño tiene que estar 4 y 12")
     @Column(nullable = false)
     private String nombre;
 
+    @NotEmpty(message= "no puede esta vacio")
     private String apellido;
 
+    @NotEmpty(message= "no puede esta vacio")
+    @Email(message = "no es una direccion de correo bien formada")
     @Column(nullable = false, unique = true)
     private String email;
 

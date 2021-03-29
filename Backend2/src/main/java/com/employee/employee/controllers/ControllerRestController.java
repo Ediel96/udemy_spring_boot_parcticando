@@ -5,14 +5,18 @@ import com.employee.employee.models.entity.Cliente;
 import com.employee.employee.models.services.IClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.validation.Valid;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 @CrossOrigin(origins = "*")
@@ -25,6 +29,12 @@ public class ControllerRestController {
     @GetMapping("/clientes")
     public List<Cliente> index(){
         return clienteService.findAll();
+    }
+
+    @GetMapping("/clientes/pages/{page}")
+    public Page<Cliente> index(@PathVariable Integer page){
+        Pageable pegeable = PageRequest.of(page , 4);
+        return clienteService.findAll(pegeable);
     }
 
     @GetMapping("/clientes/{id}")
@@ -48,10 +58,23 @@ public class ControllerRestController {
     }
 
     @PostMapping("/clientes")
-    public  ResponseEntity<?> create(@RequestBody Cliente cliente){
+    public  ResponseEntity<?> create(@Valid @RequestBody Cliente cliente, BindingResult result){
 
         Map<String, Object> response = new HashMap<>();
         Cliente clienteNew = null;
+
+        if(result.hasErrors()){
+            //Manejo de errores en java 11
+            List<String> errros = new ArrayList<>();
+
+            for(FieldError err: result.getFieldErrors()){
+                errros.add("El campo " + err.getField()+ "' " + err.getDefaultMessage());
+            }
+
+            response.put("errors", errros);
+           return  new ResponseEntity<Map <String, Object>>(response, HttpStatus.BAD_REQUEST);
+
+        }
 
         try {
             clienteNew = clienteService.save(cliente);
@@ -67,9 +90,21 @@ public class ControllerRestController {
     }
 
     @PutMapping("/clientes/{id}")
-    public ResponseEntity<?> update(@RequestBody Cliente cliente , @PathVariable Long id){
+    public ResponseEntity<?> update(@Valid @RequestBody Cliente cliente, BindingResult result , @PathVariable Long id){
         Cliente clienteActual = clienteService.findById(id);
         Map<String, Object> response = new HashMap<>();
+
+        if(result.hasErrors()){
+            //Manejo de errores en java 11
+            List<String> errros = new ArrayList<>();
+
+            for(FieldError err: result.getFieldErrors()){
+                errros.add("El campo " + err.getField()+ "' " + err.getDefaultMessage());
+            }
+
+            response.put("errors", errros);
+            return  new ResponseEntity<Map <String, Object>>(response, HttpStatus.BAD_REQUEST);
+        }
 
         if(clienteActual == null){
             response.put("mensaje", "Error: no pudo editar, el ciente ID : " .concat(id.toString().concat(" no existe en la base de datos")));
