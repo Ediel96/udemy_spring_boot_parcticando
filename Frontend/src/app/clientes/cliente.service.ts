@@ -19,34 +19,24 @@ export class ClienteService {
 
   constructor(private http: HttpClient, private router: Router) { }
 
-  getClientes(): Observable<Cliente[]> {
+  getClientes(page : number): Observable<any> {
     //return of(CLIENTES);
-    return this.http.get(this.urlEndPoint).pipe(
-      tap( response => { 
-        let clientes = response  as Cliente[];
-        console.log('ClienteSirvice: tap 1');
-        clientes.forEach(cliente => {
-          console.log(cliente.nombre);
+    return this.http.get(this.urlEndPoint + '/pages/' + page).pipe(
+      tap( (response : any) => { 
+        (response.content  as Cliente[]).forEach(cliente => {
         }) 
       }),
-      map((response) =>{
-        let cliente = response as Cliente[];
-        return cliente.map(cliente => {
+      map((response : any) =>{
+        (response.content as  Cliente[]).map(cliente => {
           cliente.nombre = cliente.nombre.toUpperCase();
-           
-          let datePipe = new DatePipe('es');
+          // let datePipe = new DatePipe('es');
           //'EEEE dd, MM yyyy' === Sunday 28, 03 2021
           // cliente.createAt = datePipe.transform(cliente.createAt, 'EEEE dd, MM yyyy')
           //cliente.createAt =  formatDate(cliente,createAt, 'dd-MM-yyyy', 'es')
           return cliente;
         });
+        return response;
       } ),
-      tap( response => { 
-        console.log('ClienteSirvice: tap 2')
-        response.forEach(cliente => {
-          console.log(cliente.nombre);
-        }) 
-      })
     );
   }
 
@@ -54,7 +44,6 @@ export class ClienteService {
     return this.http.post(this.urlEndPoint, cliente, {headers: this.httpheader}).pipe(
       map((response : any) => response.cliente as Cliente),
       catchError(e => {
-
         if(e.status === 400){
           return throwError(e);
         }

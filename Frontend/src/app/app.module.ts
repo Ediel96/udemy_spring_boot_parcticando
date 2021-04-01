@@ -10,6 +10,7 @@ import { ClientesComponent } from './clientes/clientes.component';
 import { DirectivasComponent } from './directivas/directivas.component';
 import { FooterComponent } from './footer/footer.component';
 import { HeaderComponent } from './header/header.component';
+import { PaginatorComponent } from './paginator/paginator.component'
 
 import { HttpClientModule } from '@angular/common/http';
 import { FormComponent } from './clientes/form.component';
@@ -24,7 +25,8 @@ import localeEs from '@angular/common/locales/es';
 import {LOCALE_ID} from '@angular/core'
 
 //CLiente Service 
-import {ClienteService} from './clientes/cliente.service'
+import {ClienteService} from './clientes/cliente.service';
+
 
 registerLocaleData(localeEs, 'es')
 
@@ -38,7 +40,8 @@ registerLocaleData(localeEs, 'es')
     DirectivasComponent,
     FooterComponent,
     HeaderComponent,
-    FormComponent
+    FormComponent,
+    PaginatorComponent
   ],
   imports: [
     BrowserModule,
