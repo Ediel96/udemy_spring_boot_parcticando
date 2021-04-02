@@ -30,6 +30,7 @@ export class FormComponent implements OnInit {
           nombre: ['', Validators.required],
           apellido: ['', Validators.required],
           email: ['', [Validators.required, Validators.email]],
+          createAt: ['', [Validators.required]],
       });
 
       this.cargarCliente();

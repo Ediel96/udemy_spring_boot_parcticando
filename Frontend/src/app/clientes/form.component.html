@@ -1,6 +1,6 @@
 <!-- main app container -->
 <div class="card m-3">
-  <h5 class="card-header">Angular 9 Reactive Form Validation</h5>
+  <h5 class="card-header">Registro de empleados</h5>
   <div class="card-body">
       <form [formGroup]="registerForm">
           <div class="form-row">
@@ -24,9 +24,22 @@
               <label>Email</label>
               <input type="text" formControlName="email" [(ngModel)]="cliente.email" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.email.errors }" />
               <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
-                  <div *ngIf="f.email.errors.required">Email is required</div>
-                  <div *ngIf="f.email.errors.email">Email must be a valid email address</div>
+                  <div *ngIf="f.email.errors.required">Requiere el correo</div>
+                  <div *ngIf="f.email.errors.email">No es valido el correo</div>
               </div>
+          </div>
+
+           <div class="form-group">
+            <label>Fecha</label>
+            <br>
+            <input matInput [matDatepicker]="picker" formControlName="createAt" [(ngModel)]="cliente.createAt" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.createAt.errors }" style="display:inline; width: 300px;">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <div *ngIf="submitted && f.createAt.errors" class="invalid-feedback">
+                <div *ngIf="f.createAt.errors.required">Requiere la fecha</div>
+                <div *ngIf="f.createAt.errors.createAt">No es valido el correo</div>
+            </div>
+
           </div>
 
           <div class="text-center">
@@ -45,7 +58,7 @@
 <!-- credits -->
 <div class="text-center">
   <p>
-      <a href="https://jasonwatmore.com/post/2020/04/19/angular-9-reactive-forms-validation-example" target="_top">Angular 9 - Reactive Forms Validation Example</a>
+      <a href="https://jasonwatmore.com/post/2020/04/19/angular-9-reactive-forms-validation-example" target="_top">El ejemplo original</a>
   </p>
   <p>
       <a href="https://jasonwatmore.com" target="_top">JasonWatmore.com</a>

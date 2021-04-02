@@ -26,6 +26,10 @@ import {LOCALE_ID} from '@angular/core'
 
 //CLiente Service 
 import {ClienteService} from './clientes/cliente.service';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+import { MaterialModule } from './material.module';
+// import { MatButtonModule, MatFormFieldModule, MatInputModule } from '@angular/material';
 
 
 registerLocaleData(localeEs, 'es')
@@ -49,7 +53,13 @@ registerLocaleData(localeEs, 'es')
     APP_ROUTING,
     FormsModule,
     ReactiveFormsModule,
-    SweetAlert2Module
+    SweetAlert2Module,
+    BrowserAnimationsModule,
+    MaterialModule
+    // MatFormFieldModule,
+    // MatInputModule,
+    // MatButtonModule
+    // MaterialModule
   ],
   providers: [ClienteService ,{provide: LOCALE_ID, useValue: 'es' }],
   bootstrap: [AppComponent]
