@@ -22,9 +22,9 @@ export class ClienteService {
   getClientes(page : number): Observable<any> {
     //return of(CLIENTES);
     return this.http.get(this.urlEndPoint + '/pages/' + page).pipe(
-      tap( (response : any) => { 
+      tap( (response : any) => {
         (response.content  as Cliente[]).forEach(cliente => {
-        }) 
+        })
       }),
       map((response : any) =>{
         (response.content as  Cliente[]).map(cliente => {
@@ -94,6 +94,20 @@ export class ClienteService {
         return throwError(e);
       })
     );
+  }
+
+  subirFoto( archivo : File, id): Observable<Cliente>{
+    let formdata = new FormData();
+    formdata.append("archivo", archivo);
+    formdata.append("id", id);
+    return this.http.post(`${this.urlEndPoint}/upload`, formdata).pipe(
+      map((response : any) => response.cliente as Cliente),
+      catchError(e => {
+        console.error(console.error(e.error.mensaje));
+        Swal.fire('Error al eliminar el cliente el cliente',e.error.mensaje , 'error');
+        return throwError(e);
+      })
+    )
   }
 
 }
