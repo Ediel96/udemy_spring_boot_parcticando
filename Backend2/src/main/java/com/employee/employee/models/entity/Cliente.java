@@ -33,6 +33,17 @@ public class Cliente {
     @Temporal(TemporalType.DATE)
     private Date createAt;
 
+
+    private String foto;
+
+    public String getFoto() {
+        return foto;
+    }
+
+    public void setFoto(String foto) {
+        this.foto = foto;
+    }
+
     //@PrePersist
     public  void Perpersist(){
         createAt = new Date();

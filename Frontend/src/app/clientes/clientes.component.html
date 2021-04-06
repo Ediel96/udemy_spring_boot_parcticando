@@ -1,3 +1,5 @@
+<detalle-cliente *ngIf="clienteSelecionado" [cliente] = "clienteSelecionado"></detalle-cliente>
+
 <div class="card border-primary mb-3">
   <div class="card-header">Clientes</div>
   <div class="card-body text-primary">
@@ -14,7 +16,8 @@
     <table class="table table-bordered table-striped" *ngIf="clientes?.length>0">
       <thead>
         <tr>
-          <th>Id</th>
+
+          <th>foto</th>
           <th>Nombre</th>
           <th>Apellido</th>
           <th>Email</th>
@@ -25,7 +28,12 @@
       </thead>
       <tbody>
         <tr *ngFor="let cliente of clientes">
-          <td> <button type="button" [routerLink]="['/clientes/ver', cliente.id]" class="btn btn-success btn-sm">{{ cliente.id }}</button></td>
+          <!-- <td> <button type="button"  class="btn btn-success btn-sm">{{ cliente.id }}</button></td> -->
+          <td>
+            <img *ngIf="cliente?.foto" (click)="abrirModal(cliente)" src="http://localhost:8080/api/uploads/img/{{cliente.foto}}" alt="http://localhost:8080/api/uploads/img/{{cliente.foto}}" style="width:64px" >
+            <img *ngIf="!cliente?.foto" (click)="abrirModal(cliente)" src="http://localhost:8080/api/img/not_user" alt="http://localhost:8080/api/img/not_user" style="width:64px" >
+          </td>
+
           <td>{{ cliente.nombre | uppercase }}</td>
           <td>{{ cliente.apellido }}</td>
           <td>{{ cliente.email }}</td>

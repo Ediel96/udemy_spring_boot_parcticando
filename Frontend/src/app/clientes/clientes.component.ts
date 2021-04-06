@@ -4,6 +4,7 @@ import { ClienteService } from './cliente.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import Swal from 'sweetalert2';
 import { tap } from 'rxjs/operators';
+import {ModalService} from './detalle/modal.service';
 
 @Component({
   selector: 'app-clientes',
@@ -13,8 +14,10 @@ export class ClientesComponent implements OnInit {
 
   clientes: Cliente[];
   paginador: any ;
+  clienteSelecionado : Cliente;
 
-  constructor(private clienteService: ClienteService, private activeRouter : ActivatedRoute) { }
+  constructor(private clienteService: ClienteService,
+    private activeRouter : ActivatedRoute, private modalService: ModalService) { }
 
   ngOnInit() {
     this.activeRouter.params.subscribe(params => {
@@ -27,7 +30,7 @@ export class ClientesComponent implements OnInit {
       .pipe(
         tap(response => {
           (response.content as Cliente[]).forEach(cliente => {
-            console.log('CLintes',cliente.nombre)
+            console.log('CLintes',cliente)
           })
         })
       ).subscribe(response => {
@@ -36,7 +39,7 @@ export class ClientesComponent implements OnInit {
         console.log(this.paginador)
       });
     })
-    
+
   }
 
   delete(cliente: Cliente):void{
@@ -73,6 +76,11 @@ export class ClientesComponent implements OnInit {
         )
       }
     })
+  }
+
+  abrirModal(cliente: Cliente){
+      this.clienteSelecionado = cliente;
+      this.modalService.abrilModal();
   }
 
 }

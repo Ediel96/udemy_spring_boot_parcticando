@@ -29,7 +29,8 @@ import {ClienteService} from './clientes/cliente.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { MaterialModule } from './core/material.module';
-import {DetalleComponent} from './clientes/detalle/detalle.component'
+import {DetalleComponent} from './clientes/detalle/detalle.component';
+
 // import { MatButtonModule, MatFormFieldModule, MatInputModule } from '@angular/material';
 
 

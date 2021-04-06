@@ -11,8 +11,7 @@ const APP_ROUTES: Routes =[
   {path: 'clientes', component: ClientesComponent},
   {path: 'clientes/page/:page', component: ClientesComponent},
   {path: 'clientes/form', component: FormComponent},
-  {path: 'clientes/form/:id', component: FormComponent},
-  {path: 'clientes/ver/:id', component: DetalleComponent}
+  {path: 'clientes/form/:id', component: FormComponent}
 ];
 
 export const APP_ROUTING = RouterModule.forRoot(APP_ROUTES, {useHash:false});
