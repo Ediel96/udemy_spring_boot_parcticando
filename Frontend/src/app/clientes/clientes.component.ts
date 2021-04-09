@@ -5,6 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import Swal from 'sweetalert2';
 import { tap } from 'rxjs/operators';
 import {ModalService} from './detalle/modal.service';
+import { Region } from './region';
 
 @Component({
   selector: 'app-clientes',
@@ -15,6 +16,7 @@ export class ClientesComponent implements OnInit {
   clientes: Cliente[];
   paginador: any ;
   clienteSelecionado : Cliente;
+  regiones : Region[];
 
   constructor(private clienteService: ClienteService,
     private activeRouter : ActivatedRoute, private modalService: ModalService) { }
@@ -25,7 +27,6 @@ export class ClientesComponent implements OnInit {
 
       if(!page){ page = 0; }
 
-      console.log(page)
       this.clienteService.getClientes(page)
       .pipe(
         tap(response => {
@@ -36,9 +37,20 @@ export class ClientesComponent implements OnInit {
       ).subscribe(response => {
         this.clientes = response.content as Cliente[];
         this.paginador = response;
-        console.log(this.paginador)
       });
     })
+
+    this.modalService.notificarUpload.subscribe(cliente => {
+      this.clientes = this.clientes.map(clienteOriginal =>{
+        if(cliente.id == clienteOriginal.id){
+          clienteOriginal.foto = cliente.foto;
+          console.log('cliente.foto',clienteOriginal.foto);
+        }
+        return clienteOriginal;
+      })
+    })
+
+
 
   }
 
@@ -64,8 +76,7 @@ export class ClientesComponent implements OnInit {
 
         this.clienteService.delete(cliente.id).subscribe(
           response => {
-            this.clientes = this.clientes.filter( cli => cli !== cliente)
-            console.log(this.clientes)
+            this.clientes = this.clientes.filter( cli => cli !== cliente);
           }
         )
 

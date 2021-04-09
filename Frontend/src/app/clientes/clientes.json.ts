@@ -1,5 +1,6 @@
 import { Cliente } from './clientes';
 
+/*
 export const CLIENTES: Cliente[] = [
   { id: 1, nombre: 'Andrés', apellido: 'Guzmán', email: 'profesor@bolsadeideas.com', createAt: '2017-12-11' },
   { id: 2, nombre: 'Mr. John', apellido: 'Doe', email: 'john.doe@gmail.com', createAt: '2017-11-11' },
@@ -12,4 +13,4 @@ export const CLIENTES: Cliente[] = [
   { id: 9, nombre: 'Dr James', apellido: 'Gosling', email: 'james.gosling@gmail.com', createAt: '2017-11-18' },
   { id: 10, nombre: 'Magma', apellido: 'Lee', email: 'magma.lee@gmail.com', createAt: '2017-11-19' },
   { id: 11, nombre: 'Tornado', apellido: 'Roe', email: 'tornado.roe@gmail.com', createAt: '2017-11-20' }
-];
+];*/

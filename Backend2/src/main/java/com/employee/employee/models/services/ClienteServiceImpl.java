@@ -3,6 +3,7 @@ package com.employee.employee.models.services;
 
 import com.employee.employee.models.dao.ICLienteDao;
 import com.employee.employee.models.entity.Cliente;
+import com.employee.employee.models.entity.Region;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -45,5 +46,11 @@ public class ClienteServiceImpl implements  IClienteService{
     @Transactional
     public void delete(long id) {
         clienteDao.deleteById(id);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Region> findAllRegiones() {
+        return clienteDao.findAllByRegiones();
     }
 }

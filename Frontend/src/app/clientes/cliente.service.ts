@@ -2,11 +2,15 @@ import { Injectable } from '@angular/core';
 import {DatePipe} from '@angular/common';
 
 import { Cliente } from './clientes';
+import {Region} from './region';
+
+
 import { Observable, throwError, of } from 'rxjs';
 import { HttpClient,  HttpEvent,  HttpHeaders, HttpRequest } from '@angular/common/http';
 import { catchError, map, tap } from 'rxjs/operators';
 import Swal from 'sweetalert2';
-import {Router} from '@angular/router'
+import {Router} from '@angular/router';
+
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +22,11 @@ export class ClienteService {
   private httpheader = new HttpHeaders ({'Content-type' : 'application/json'});
 
   constructor(private http: HttpClient, private router: Router) { }
+
+
+  getRegiones(): Observable<Region[]>{
+    return this.http.get<Region[]>(this.urlEndPoint + '/regiones')
+  }
 
   getClientes(page : number): Observable<any> {
     //return of(CLIENTES);
@@ -74,11 +83,9 @@ export class ClienteService {
     return this.http.put(`${this.urlEndPoint}/${cliente.id}`, cliente, {headers: this.httpheader}).pipe(
       map((response : any) => response.cliente as Cliente),
       catchError(e => {
-
         if(e.status === 400){
           return throwError(e);
         }
-
         console.error(console.error(e.error.mensaje));
         Swal.fire('Error al editar el cliente',e.error.mensaje , 'error');
         return throwError(e);

@@ -4,6 +4,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import swal from 'sweetalert2';
+import { Region } from './region';
 
 
 
@@ -14,10 +15,11 @@ import swal from 'sweetalert2';
 })
 export class FormComponent implements OnInit {
 
-  errores : string[]; 
+  errores : string[];
   registerForm: FormGroup;
   submitted = false;
   cliente : Cliente = new Cliente();
+  regiones : Region[];
 
 
 
@@ -31,16 +33,21 @@ export class FormComponent implements OnInit {
           apellido: ['', Validators.required],
           email: ['', [Validators.required, Validators.email]],
           createAt: ['', [Validators.required]],
+          region: ['', Validators.required],
       });
 
       this.cargarCliente();
+
+      this.ClienteService.getRegiones().subscribe(regiones => this.regiones  = regiones);
   }
 
   cargarCliente():void{
     this.activatedRoute.params.subscribe(params => {
       let id = params['id'];
       if(id){
-        this.ClienteService.getCliente(id).subscribe((cliente)=> this.cliente = cliente)
+        this.ClienteService.getCliente(id).subscribe(
+          (cliente)=> this.cliente = cliente
+        )
       }
     })
   }
@@ -49,7 +56,6 @@ export class FormComponent implements OnInit {
     this.ClienteService.updateCliente(this.cliente)
     .subscribe( res =>{
       this.router.navigate(['/clientes'])
-      console.log(res)
       swal.fire('Cliente Actualizado', `Cliente ${res.nombre} actualizado con exito!`  , 'success');
       },err =>{
         this.errores = err.error.errors as string[];
@@ -68,9 +74,10 @@ export class FormComponent implements OnInit {
           return;
       }
 
+      console.log('cliente form',this.registerForm.value);
       this.ClienteService.create(this.registerForm.value).subscribe(
         res =>{
-          this.router.navigate(['/clientes'])
+          // this.router.navigate(['/clientes'])
           swal.fire('Nuevo cliente', `Cliente ${res.nombre} creado con exito!`  , 'success');
         },err =>{
           this.errores = err.error.errors as string[];

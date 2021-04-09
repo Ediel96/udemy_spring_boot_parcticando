@@ -1,6 +1,7 @@
 package com.employee.employee.models.entity;
 
-import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.util.Date;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -33,8 +34,23 @@ public class Cliente {
     @Temporal(TemporalType.DATE)
     private Date createAt;
 
-
     private String foto;
+
+    @NotNull(message = "no puede estar vacio")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "region_id")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    private Region region;
+
+
+    public Region getRegion() {
+        return region;
+    }
+//    private Region region;
+
+    public void setRegion(Region region) {
+        this.region = region;
+    }
 
     public String getFoto() {
         return foto;
