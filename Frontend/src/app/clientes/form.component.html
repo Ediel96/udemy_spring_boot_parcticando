@@ -44,9 +44,8 @@
           <div class="form-group">
             <label>Region</label>
             <!-- <input type="text"  /> -->
-            <select class="custom-select" formControlName="region" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.region.errors }">
-              <option selected>Choose...</option>
-              <option *ngFor="let region of regiones" [ngValue]="region.id">{{region.nombre}}</option>
+            <select [compareWith]="compararRegion" class="custom-select" formControlName="region" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.region.errors }">
+              <option *ngFor="let region of regiones" [ngValue]="region">{{region.nombre}}</option>
             </select>
             <div *ngIf="submitted && f.region.errors" class="invalid-feedback">
                 <div *ngIf="f.region.errors.required">Requiere el correo</div>

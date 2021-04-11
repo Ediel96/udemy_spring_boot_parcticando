@@ -53,6 +53,14 @@ export class FormComponent implements OnInit {
   }
 
   updateCliente():void{
+    this.submitted = true;
+
+    if (this.registerForm.invalid) {
+        return;
+    }
+    this.registerForm.value.id = this.cliente.id;
+    this.cliente = this.registerForm.value;
+    // this.cliente.push(id)
     this.ClienteService.updateCliente(this.cliente)
     .subscribe( res =>{
       this.router.navigate(['/clientes'])
@@ -74,10 +82,9 @@ export class FormComponent implements OnInit {
           return;
       }
 
-      console.log('cliente form',this.registerForm.value);
       this.ClienteService.create(this.registerForm.value).subscribe(
         res =>{
-          // this.router.navigate(['/clientes'])
+          this.router.navigate(['/clientes'])
           swal.fire('Nuevo cliente', `Cliente ${res.nombre} creado con exito!`  , 'success');
         },err =>{
           this.errores = err.error.errors as string[];
@@ -85,6 +92,10 @@ export class FormComponent implements OnInit {
           console.error(err.error.errors);
         }
       )
+  }
+
+  compararRegion( o1: Region, o2: Region):boolean {
+    return o1 === null || o2 === null? false: o1.id === o2.id;
   }
 
   onReset() {
