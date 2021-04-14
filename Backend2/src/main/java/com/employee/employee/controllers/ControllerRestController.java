@@ -1,6 +1,5 @@
 package com.employee.employee.controllers;
 
-
 import com.employee.employee.models.entity.Cliente;
 import com.employee.employee.models.entity.Region;
 import com.employee.employee.models.services.IClienteService;
@@ -32,7 +31,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api")
@@ -44,7 +42,6 @@ public class ControllerRestController {
     private IUploadFileService uploadService;
 
     private final Logger log = LoggerFactory.getLogger(ControllerRestController.class);
-
 
     @GetMapping("/clientes")
     public List<Cliente> index(){
@@ -252,11 +249,9 @@ public class ControllerRestController {
         return new ResponseEntity<Resource>(recurso,cabecera, HttpStatus.OK);
     }
 
-
     @GetMapping("/clientes/regiones")
     public List<Region> ListarRegion(){
         return clienteService.findAllRegiones();
     }
-
 
 }
