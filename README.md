@@ -3,6 +3,7 @@
 instalacion de nodejs
 
 1. Configuracion de git 
+
 ```
 git config --global user.name "John Doe"
 
@@ -19,10 +20,8 @@ cat ~/.ssh/id_rsa.pub
 sudo cp -r node/{bin,include,lib,share} /usr/
 ```
 
-2. Instalar angular
+3. Instalar angular
 
 ```
 npm install -g @angular/cli
 ```
-
-
