@@ -23,9 +23,21 @@ export class ClienteService {
 
   constructor(private http: HttpClient, private router: Router) { }
 
+  private isNoAutorizado(e): boolean{
+    if(e.status == 401 || e.status == 403){
+      this.router.navigate(['/login'])
+      return true;
+    }
+    return false;
+  }
 
   getRegiones(): Observable<Region[]>{
-    return this.http.get<Region[]>(this.urlEndPoint + '/regiones')
+    return this.http.get<Region[]>(this.urlEndPoint + '/regiones').pipe(
+      catchError(e => {
+        this.isNoAutorizado(e);
+        return throwError(e);
+      })  
+    )
   }
 
   getClientes(page : number): Observable<any> {
@@ -53,6 +65,11 @@ export class ClienteService {
     return this.http.post(this.urlEndPoint, cliente, {headers: this.httpheader}).pipe(
       map((response : any) => response.cliente as Cliente),
       catchError(e => {
+
+        if(this.isNoAutorizado(e)){
+          return throwError(e);
+        }
+
         if(e.status === 400){
           return throwError(e);
         }
@@ -67,6 +84,11 @@ export class ClienteService {
   getCliente(id): Observable<Cliente>{
     return this.http.get<Cliente>(`${this.urlEndPoint}/${id}`).pipe(
       catchError(e => {
+
+        if(this.isNoAutorizado(e)){
+          return throwError(e);
+        }
+
         this.router.navigate(['/clientes']);
         console.error(e.error.mensaje);
         Swal.fire({
@@ -83,6 +105,11 @@ export class ClienteService {
     return this.http.put(`${this.urlEndPoint}/${cliente.id}`, cliente, {headers: this.httpheader}).pipe(
       map((response : any) => response.cliente as Cliente),
       catchError(e => {
+
+        if(this.isNoAutorizado(e)){
+          return throwError(e);
+        }
+
         if(e.status === 400){
           return throwError(e);
         }
@@ -96,6 +123,11 @@ export class ClienteService {
   delete(id: number) : Observable<Cliente>{
     return this.http.delete<Cliente>(`${this.urlEndPoint}/${id}`, {headers: this.httpheader}).pipe(
       catchError(e => {
+
+        if(this.isNoAutorizado(e)){
+          return throwError(e);
+        }
+
         console.error(console.error(e.error.mensaje));
         Swal.fire('Error al eliminar el cliente el cliente',e.error.mensaje , 'error');
         return throwError(e);
@@ -112,7 +144,12 @@ export class ClienteService {
       reportProgress: true
     });
 
-    return this.http.request(req);
+    return this.http.request(req).pipe(
+      catchError(e => {
+        this.isNoAutorizado(e);
+        return throwError(e);
+      })  
+    );
   }
 
 }

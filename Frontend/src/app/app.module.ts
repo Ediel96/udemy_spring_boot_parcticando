@@ -30,6 +30,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { MaterialModule } from './core/material.module';
 import {DetalleComponent} from './clientes/detalle/detalle.component';
+import { LoginComponent } from './usuarios/login.component';
 
 // import { MatButtonModule, MatFormFieldModule, MatInputModule } from '@angular/material';
 
@@ -48,7 +49,8 @@ registerLocaleData(localeEs, 'es')
     HeaderComponent,
     FormComponent,
     PaginatorComponent,
-    DetalleComponent
+    DetalleComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
