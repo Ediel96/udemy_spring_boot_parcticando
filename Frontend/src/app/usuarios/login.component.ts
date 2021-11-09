@@ -27,6 +27,17 @@ export class LoginComponent implements OnInit {
       password: ['', Validators.required],
     });
 
+    
+
+    if(this.authServ.isAuthenticated()){
+      Swal.fire({
+        icon: 'info',
+        title: `Hola `,
+        text: `${this.authServ.usuario.username}, has iniciando sesion con exito`
+      })
+      this.router.navigate(['/clientes'])
+    }
+
   }
 
   get f() { return this.loginForm.controls; }
@@ -38,22 +49,28 @@ export class LoginComponent implements OnInit {
         return;
     }
 
-    console.log(this.loginForm.value);
 
     this.authServ.login(this.loginForm.value).subscribe(response => {
 
-      let payload = JSON.parse(atob(response.access_token.split(".")[1]))
+      this.authServ.guardarUsuario(response.access_token);
+      this.authServ.guardarToken(response.access_token);
+      let usuario = this.authServ.usuario;
 
-      // this.authServ.guardarUsuario()
-      // this.authServ.guardarToken()
-
-      // console.log('response : ',response)
+      console.log('ususrios' , usuario)
       this.router.navigate(['/clientes']);
       Swal.fire({
         icon: 'success',
         title: `Hola `,
-        text: `${response.nombre}, has iniciando sesion con exito`
+        text: `${usuario.nombre}, has iniciando sesion con exito`
       })
+    }, err =>{
+      if(err.status == 400){
+        Swal.fire({
+          icon: 'error',
+          title: `Error Login `,
+          text: ` Usuario o clave incorrecta`
+        })
+      }
     })
 
   }
