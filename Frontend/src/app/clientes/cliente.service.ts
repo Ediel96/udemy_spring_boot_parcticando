@@ -147,26 +147,26 @@ export class ClienteService {
   
 
   subirFoto( archivo : File, id): Observable<HttpEvent<{}>> {
-    let formdata = new FormData();
-    formdata.append("archivo", archivo);
-    formdata.append("id", id);
+    let formData = new FormData();
+    formData.append("archivo", archivo);
+    formData.append("id", id);
 
     let httpHeaders = new HttpHeaders();
     let token = this.authService.token;
-    if(token != null){
-      httpHeaders = this.httpheader.append('Authorization' , 'Bearer' + token)
+    if (token != null) {
+      httpHeaders = httpHeaders.append('Authorization', 'Bearer ' + token);
     }
 
-    const req = new HttpRequest('POST' , `${this.urlEndPoint}/upload`, formdata,{
+    const req = new HttpRequest('POST', `${this.urlEndPoint}/upload`, formData, {
       reportProgress: true,
-      headers : httpHeaders
+      headers: httpHeaders
     });
 
     return this.http.request(req).pipe(
       catchError(e => {
         this.isNoAutorizado(e);
         return throwError(e);
-      })  
+      })
     );
   }
 
