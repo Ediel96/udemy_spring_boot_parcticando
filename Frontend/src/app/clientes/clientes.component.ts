@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import { tap } from 'rxjs/operators';
 import {ModalService} from './detalle/modal.service';
 import { Region } from './region';
+import { AuthService} from '../usuarios/auth.service'
 
 @Component({
   selector: 'app-clientes',
@@ -18,7 +19,7 @@ export class ClientesComponent implements OnInit {
   clienteSelecionado : Cliente;
   regiones : Region[];
 
-  constructor(private clienteService: ClienteService,
+  constructor(private clienteService: ClienteService, public authService : AuthService,
     private activeRouter : ActivatedRoute, private modalService: ModalService) { }
 
   ngOnInit() {
